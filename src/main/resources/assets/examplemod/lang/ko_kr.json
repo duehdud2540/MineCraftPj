@@ -1,0 +1,14 @@
+{
+  "itemGroup.examplemod": "예시 모드 탭",
+  "block.examplemod.example_block": "예시 블록",
+  "item.examplemod.example_item": "예시 아이템",
+  "entity.examplemod.merchant_npc": "상인 NPC",
+  "item.examplemod.merchant_npc_spawn_egg": "상인 NPC 스폰 알",
+  "examplemod.configuration.title": "예시 모드 설정",
+  "examplemod.configuration.section.examplemod.common.toml": "예시 모드 설정",
+  "examplemod.configuration.section.examplemod.common.toml.title": "예시 모드 설정",
+  "examplemod.configuration.items": "아이템 목록",
+  "examplemod.configuration.logDirtBlock": "흙 블록 로그",
+  "examplemod.configuration.magicNumberIntroduction": "매직 넘버 문구",
+  "examplemod.configuration.magicNumber": "매직 넘버"
+}

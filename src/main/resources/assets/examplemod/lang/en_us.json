@@ -2,7 +2,8 @@
   "itemGroup.examplemod": "Example Mod Tab",
   "block.examplemod.example_block": "Example Block",
   "item.examplemod.example_item": "Example Item",
-
+  "entity.examplemod.merchant_npc": "Merchant NPC",
+  "item.examplemod.merchant_npc_spawn_egg": "Merchant NPC Spawn Egg",
   "examplemod.configuration.title": "Example Mod Configs",
   "examplemod.configuration.section.examplemod.common.toml": "Example Mod Configs",
   "examplemod.configuration.section.examplemod.common.toml.title": "Example Mod Configs",
