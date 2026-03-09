@@ -2,6 +2,9 @@
   "item.모드ID.coin_1": "1원",
   "item.모드ID.coin_5": "5원",
   "item.모드ID.coin_10": "10원",
-  "item.모드ID.coin_100" : "100원"
+  "item.모드ID.coin_50": "50원",
+  "item.모드ID.coin_100" : "100원",
+  "itemGroup.mc_merchant.coin_tab": "동전"
+
 
 }

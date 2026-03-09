@@ -62,10 +62,13 @@ public class ScarecrowMerchant extends AbstractVillager {
         MerchantOffers offers = this.getOffers();
 
         // 🌟 최신 버전 문법: 플레이어가 내는 물건은 ItemCost로 적어야 합니다!
-        offers.add(new MerchantOffer(
-                new ItemCost(Items.DIRT, 1), // 살 때 내는 물건 (흙 1개)
-                new ItemStack(Items.DIAMOND, 1), // 받을 물건 (다이아몬드 1개)
-                100, 0, 0.05f
+
+        //1->5
+        this.getOffers().add(new MerchantOffer(
+                new ItemCost(ExampleMod.COIN_1.get(), 5), // 입금 1
+                new ItemStack(ExampleMod.COIN_5.get(), 1), // 출금
+                99999, 0, 0.00f // 최대 거래 횟수, 경험치, 가격 변동 계수
         ));
+
     }
 }
