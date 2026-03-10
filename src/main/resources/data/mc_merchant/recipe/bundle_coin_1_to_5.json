@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    { "item": "mc_merchant:coin_1" },
+    { "item": "mc_merchant:coin_1" },
+    { "item": "mc_merchant:coin_1" },
+    { "item": "mc_merchant:coin_1" },
+    { "item": "mc_merchant:coin_1" }
+  ],
+  "result": {
+    "count": 1,
+    "id": "mc_merchant:coin_5"
+  },
+  "category": "misc"
+}

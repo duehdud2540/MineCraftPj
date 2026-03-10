@@ -69,6 +69,5 @@ public class ScarecrowMerchant extends AbstractVillager {
                 new ItemStack(ExampleMod.COIN_5.get(), 1), // 출금
                 99999, 0, 0.00f // 최대 거래 횟수, 경험치, 가격 변동 계수
         ));
-
     }
 }
