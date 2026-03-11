@@ -59,12 +59,76 @@ public class ScarecrowMerchant extends AbstractVillager {
         MerchantOffers offers = this.getOffers();
 
 
+        //거래 품목 코드
+        this.getOffers().add(new MerchantOffer(
+                new ItemCost(Items.DIAMOND, 1), // 입금 1
+                new ItemStack(ExampleMod.COIN_1.get(), 1), // 출금
+                99999, 0, 0.00f // 최대 거래 횟수, 경험치, 가격 변동 계수 다이아 5개 1원
+        ));
+        this.getOffers().add(new MerchantOffer(
+                new ItemCost(Items.IRON_INGOT, 10), // 입금 1
+                new ItemStack(ExampleMod.COIN_1.get(), 1), // 출금
+                99999, 0, 0.00f // 최대 거래 횟수, 경험치, 가격 변동 계수 // 철 1원
+        ));
+        this.getOffers().add(new MerchantOffer(
+                new ItemCost(Items.GOLD_INGOT, 10), // 입금 1
+                new ItemStack(ExampleMod.COIN_1.get(), 1), // 출금
+                99999, 0, 0.00f // 최대 거래 횟수, 경험치, 가격 변동 계수 //골드
+        ));
+        this.getOffers().add(new MerchantOffer(
+                new ItemCost(Items.COAL_BLOCK, 10),
+                new ItemStack(ExampleMod.COIN_1.get(), 1),
+                99999, 0, 0.00f // 최대 거래 횟수, 경험치, 가격 변동 계수 //석탄
+        ));
+        this.getOffers().add(new MerchantOffer(
+            new ItemCost(Items.COPPER_BLOCK, 5),
+                new ItemStack(ExampleMod.COIN_1.get(), 1),
+                99999, 0, 0.00f // 최대 거래 횟수, 경험치, 가격 변동 계수 // 구블
+        ));
+        this.getOffers().add(new MerchantOffer(
+                new ItemCost(Items.NETHERITE_INGOT, 1),
+                new ItemStack(ExampleMod.COIN_5.get(), 1),
+                99999, 0, 0.00f // 최대 거래 횟수, 경험치, 가격 변동 계수 // 네더라이트
+        ));
+
+        //판매
 
 
         this.getOffers().add(new MerchantOffer(
-                new ItemCost(ExampleMod.COIN_1.get(), 5), // 입금 1
-                new ItemStack(ExampleMod.COIN_5.get(), 1), // 출금
-                99999, 0, 0.00f // 최대 거래 횟수, 경험치, 가격 변동 계수
+                new ItemCost(ExampleMod.COIN_5.get(), 1),
+                new ItemStack(Items.DIAMOND, 1),
+                99999, 0, 0.00f // 최대 거래 횟수, 경험치, 가격 변동 계수 다이아 -> 5원
         ));
+        this.getOffers().add(new MerchantOffer(
+                new ItemCost(ExampleMod.COIN_1.get(), 1),
+                new ItemStack(Items.IRON_INGOT, 1),
+                99999, 0, 0.00f // 최대 거래 횟수, 경험치, 가격 변동 계수 철
+        ));
+        this.getOffers().add(new MerchantOffer(
+                new ItemCost(ExampleMod.COIN_1.get(), 1),
+                new ItemStack(Items.GOLD_INGOT, 1),
+                99999, 0, 0.00f // 최대 거래 횟수, 경험치, 가격 변동 계수 // 금
+        ));
+        this.getOffers().add(new MerchantOffer(
+                new ItemCost(ExampleMod.COIN_1.get(), 1),
+                new ItemStack(Items.COAL_BLOCK, 1),
+                99999, 0, 0.00f // 최대 거래 횟수, 경험치, 가격 변동 계수 //석탄
+        ));
+        this.getOffers().add(new MerchantOffer(
+                new ItemCost(ExampleMod.COIN_1.get(), 1),
+                new ItemStack(Items.COPPER_BLOCK, 1),
+                99999, 0, 0.00f // 최대 거래 횟수, 경험치, 가격 변동 계수 // 구블
+        ));
+        this.getOffers().add(new MerchantOffer(
+                new ItemCost(ExampleMod.COIN_50.get(), 1),
+                new ItemStack(Items.NETHERITE_INGOT, 1),
+                99999, 0, 0.00f // 최대 거래 횟수, 경험치, 가격 변동 계수 // 구블
+        ));
+
+
+
+        // 여기까지
+
+
     }
 }
