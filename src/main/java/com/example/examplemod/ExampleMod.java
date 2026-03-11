@@ -67,12 +67,11 @@ public class ExampleMod
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 
-    // 🌟 내 전용 탭 정의
-    // 2. 그 다음에 탭을 만듭니다
+
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> COIN_TAB =
             CREATIVE_MODE_TABS.register("coin_tab", () -> CreativeModeTab.builder()
                     .title(Component.literal("동전"))
-                    .icon(() -> new ItemStack(COIN_100.get())) // 아이콘은 100원!
+                    .icon(() -> new ItemStack(COIN_100.get())) // 아이콘은 100원
                     .displayItems((parameters, output) -> {
                         output.accept(COIN_10.get());
                         output.accept(COIN_50.get());
@@ -86,7 +85,7 @@ public class ExampleMod
     public static final DeferredHolder<EntityType<?>, EntityType<ScarecrowMerchant>> MERCHANT =
             ENTITY_TYPES.register("merchant",
                     () -> EntityType.Builder.of(ScarecrowMerchant::new, MobCategory.CREATURE)
-                            .sized(0.6f, 1.95f) // 마인크래프트 기본 주민과 똑같은 크기
+                            .sized(0.6f, 1.95f)
                             .build("merchant"));
     // Create a Deferred Register to hold CreativeModeTabs which will all be registered under the "examplemod" namespace
 
@@ -160,11 +159,9 @@ public class ExampleMod
         LOGGER.info("HELLO from server starting");
     }
     public static void onAttributeCreate(EntityAttributeCreationEvent event) {
-        // 마인크래프트 기본 주민(Villager)의 체력과 능력치를 그대로 복사해서 넣어줍니다! 변경됨
         event.put(MERCHANT.get(), Villager.createAttributes().build());
     }
     public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        // 우리 상인에게 기본 주민(Villager)의 스킨을 씌운다! 변경됨
         event.registerEntityRenderer(MERCHANT.get(), ScarecrowRenderer::new);
     }
 

@@ -1,4 +1,4 @@
-package com.example.examplemod; // 본인의 패키지 이름 그대로 두세요!
+package com.example.examplemod;
 
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -23,7 +23,6 @@ public class ScarecrowMerchant extends AbstractVillager {
 
     @Override
     protected void registerGoals() {
-        // 텅~ (움직이지 않음)
     }
 
     @Override
@@ -35,24 +34,22 @@ public class ScarecrowMerchant extends AbstractVillager {
                 this.playSound(SoundEvents.VILLAGER_TRADE, 1.0F, 1.0F);
             }
 
-            // 2. 🌟 핵심: 거래창은 반드시 '서버(Server)' 쪽에서 열어야 합니다.
-            // (만약 isClientSide 부분에 빨간 줄이 뜨면 isClientSide() 처럼 뒤에 괄호를 붙여주세요!)
+
             if (!this.level().isClientSide) {
-                this.setTradingPlayer(player); // "이 플레이어랑 거래할게!" 라고 지정
-                this.openTradingScreen(player, this.getDisplayName(), 1); // 상점 UI 띄우기! (레벨 1)
+                this.setTradingPlayer(player);
+                this.openTradingScreen(player, this.getDisplayName(), 1); // 상점 UI 띄우기
             }
 
-            // "내가 우클릭 이벤트를 성공적으로 처리했어!" 라고 게임에 보고함
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
 
         return super.mobInteract(player, hand);
     }
 
-    // 🌟 최신 버전 필수 추가 사항: 경험치 보상 로직
+
     @Override
     protected void rewardTradeXp(MerchantOffer offer) {
-        // 허수아비 상인이므로 경험치를 안 받습니다. 비워둡니다!
+
     }
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob otherParent) {
         return null;
@@ -61,9 +58,9 @@ public class ScarecrowMerchant extends AbstractVillager {
     protected void updateTrades() {
         MerchantOffers offers = this.getOffers();
 
-        // 🌟 최신 버전 문법: 플레이어가 내는 물건은 ItemCost로 적어야 합니다!
 
-        //1->5
+
+
         this.getOffers().add(new MerchantOffer(
                 new ItemCost(ExampleMod.COIN_1.get(), 5), // 입금 1
                 new ItemStack(ExampleMod.COIN_5.get(), 1), // 출금
