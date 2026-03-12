@@ -1,0 +1,12 @@
+{
+  "itemGroup.examplemod": "Example Mod Tab",
+  "block.examplemod.example_block": "Example Block",
+  "item.examplemod.example_item": "Example Item",
+  "item.mymod.dummy_coin": "Dummy Coin",
+  "item.mc_merchant.coin_1": "1 Won Coin",
+  "item.mc_merchant.coin_5": "5 Won Coin",
+  "item.mc_merchant.coin_10": "10 Won Coin",
+  "item.mc_merchant.coin_50": "50 Won Coin",
+  "item.mc_merchant.coin_100": "100 Won Coin"
+
+}
