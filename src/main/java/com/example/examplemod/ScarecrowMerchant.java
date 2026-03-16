@@ -14,11 +14,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageSource;
 
 public class ScarecrowMerchant extends AbstractVillager {
 
     public ScarecrowMerchant(EntityType<? extends AbstractVillager> entityType, Level level) {
         super(entityType, level);
+        this.fireImmune();
+        //불에안탐
     }
 
     @Override
@@ -125,10 +128,44 @@ public class ScarecrowMerchant extends AbstractVillager {
                 99999, 0, 0.00f // 최대 거래 횟수, 경험치, 가격 변동 계수 // 구블
         ));
 
-
+}
 
         // 여기까지
 
+        public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+            // 플레이어와의 거리가 아무리 멀어도 절대 삭제하지 않음
+            return false;
+        }
+
+        // 이름표없어도 사라지지않음
+        @Override
+        public boolean requiresCustomPersistence() {
+            return true;
+        }
+        // 모든데미지 무력화
+        @Override
+        public boolean hurt(DamageSource source, float amount) {
+            // 어떤 데미지가 들어와도 false를 반환하여 데미지를 입지 않습니다.
+            return false;
+        }
+
+        // 밀려나지않음
+        @Override
+        public boolean isPushable() {
+            return false;
+        }
+
+        // 몬스터 인식불가
+        @Override
+        public boolean canBeSeenAsEnemy() {
+            return false;
+        }
+
+        // 유체화
+        @Override
+        public boolean isPickable() {
+            return true; // 우클릭 상호작용을 위해 true 유지
+        }
+
 
     }
-}
