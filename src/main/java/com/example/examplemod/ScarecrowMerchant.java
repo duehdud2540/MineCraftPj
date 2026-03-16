@@ -29,7 +29,7 @@ public class ScarecrowMerchant extends AbstractVillager {
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (this.isAlive() && this.getTradingPlayer() == null) {
 
-            // 1. 거래 시작하는 '끄덕' 소리 재생 (진짜 상인 느낌 나게!)
+            // 1. 거래 시작하는 '끄덕' 소리 재생
             if (hand == InteractionHand.MAIN_HAND) {
                 this.playSound(SoundEvents.VILLAGER_TRADE, 1.0F, 1.0F);
             }
