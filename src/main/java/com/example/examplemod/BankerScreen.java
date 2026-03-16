@@ -48,7 +48,7 @@ public class BankerScreen extends AbstractContainerScreen<BankerMenu> {
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         this.renderBackground(graphics, mouseX, mouseY, partialTick); // 어두운 뒷배경 깔기
         super.render(graphics, mouseX, mouseY, partialTick);
-        String balanceText = ExampleMod.ClientGameEvents.clientBalance + " G";
+        String balanceText = ExampleMod.ClientGameEvents.clientBalance + " Won";
 
         // 박스 크기 계산
         int boxWidth = 20 + this.font.width(balanceText) + 10;
