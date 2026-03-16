@@ -4,5 +4,7 @@
   "item.mc_merchant.coin_10": "10원",
   "item.mc_merchant.coin_50": "50원",
   "item.mc_merchant.coin_100": "100원",
+  "item.mc_merchant.return_scroll": "마을귀환 주문서",
   "itemGroup.mc_merchant.coin_tab": "동전"
+
 }

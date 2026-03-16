@@ -89,6 +89,8 @@ public class ExampleMod {
     // Create a Deferred Register to hold Items which will all be registered under the "examplemod" namespace
     //아랫부분 변경됨
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MODID);
+    public static final DeferredHolder<Item, Item> RETURN_SCROLL = ITEMS.register("return_scroll",
+            () -> new ReturnScrollItem(new Item.Properties().stacksTo(16))); // 최대 16개까지 겹칠 수 있음
     public static final DeferredHolder<Item, Item> COIN_1 = ITEMS.register("coin_1", () -> new Item(new Item.Properties()));
     public static final DeferredHolder<Item, Item> COIN_5 = ITEMS.register("coin_5", () -> new Item(new Item.Properties()));
     public static final DeferredHolder<Item, Item> COIN_10 = ITEMS.register("coin_10", () -> new Item(new Item.Properties()));
