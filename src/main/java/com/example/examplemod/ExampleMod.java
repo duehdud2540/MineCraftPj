@@ -119,9 +119,17 @@ public class ExampleMod {
     // 상인(merchant) 등록하기
     public static final DeferredHolder<EntityType<?>, EntityType<ScarecrowMerchant>> MERCHANT = ENTITY_TYPES.register("merchant", () -> EntityType.Builder.of(ScarecrowMerchant::new, MobCategory.CREATURE).sized(0.6f, 1.95f).build("merchant"));
     // Create a Deferred Register to hold CreativeModeTabs which will all be registered under the "examplemod" namespace
+
+    //은행원 등록
     public static final DeferredHolder<EntityType<?>, EntityType<BankerEntity>> BANKER =
             ENTITY_TYPES.register("banker", () -> EntityType.Builder.of(BankerEntity::new, MobCategory.CREATURE)
                     .sized(0.6f, 1.95f).build("banker"));
+//마녀 등록
+    public static final DeferredHolder<EntityType<?>, EntityType<PotionMerchantEntity>> POTION_MERCHANT =
+            ENTITY_TYPES.register("potion_merchant",
+                    () -> EntityType.Builder.of(PotionMerchantEntity::new, MobCategory.CREATURE)
+                            .sized(0.6f, 1.95f) // 마녀(Witch) 사이즈와 동일
+                            .build("potion_merchant"));
 
 
     // Creates a new Block with the id "examplemod:example_block", combining the namespace and path
@@ -350,11 +358,14 @@ public class ExampleMod {
     public static void onAttributeCreate(EntityAttributeCreationEvent event) {
         event.put(MERCHANT.get(), Villager.createAttributes().build());
         event.put(BANKER.get(), BankerEntity.createAttributes().build());
+        event.put(POTION_MERCHANT.get(), Villager.createAttributes().build());
+
     }
 
     public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(MERCHANT.get(), ScarecrowRenderer::new);
         event.registerEntityRenderer(BANKER.get(),BankerRenderer::new);
+        event.registerEntityRenderer(POTION_MERCHANT.get(), PotionMerchantRenderer::new);
     }
 
     // 1. MOD 버스용 (초기 설정)

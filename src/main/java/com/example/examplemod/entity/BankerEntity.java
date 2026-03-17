@@ -24,6 +24,11 @@ public class BankerEntity extends PathfinderMob {
         this.fireImmune();
     }
     @Override
+    protected void registerGoals() {
+        // 8블록 이내의 플레이어를 쳐다봄
+        this.goalSelector.addGoal(0, new net.minecraft.world.entity.ai.goal.LookAtPlayerGoal(this, Player.class, 2.0F));
+    }
+    @Override
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
         // 서버 측에서만 실행
         if (!this.level().isClientSide && player instanceof ServerPlayer serverPlayer) {
@@ -41,9 +46,18 @@ public class BankerEntity extends PathfinderMob {
     // 모든데미지 무력화
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        // 어떤 데미지가 들어와도 false를 반환하여 데미지를 입지 않습니다.
+        // 절대 데미지나(kill) 공허같은 데미지는 무조건 들어오게만들었음
+        if (source.is(net.minecraft.world.damagesource.DamageTypes.FELL_OUT_OF_WORLD)) {
+            return true;
+        }
+
+        // 공격자가 플레이어이고 크리에이티브 모드인 경우 죽일 수 있게 허용함
+        if (source.getEntity() instanceof Player player && player.isCreative()) {
+            return true;
+        }
         return false;
     }
+
 
     // 밀려나지않음
     @Override
