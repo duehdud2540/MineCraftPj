@@ -1,0 +1,11 @@
+{
+  "item.mc_merchant.coin_1": "1원",
+  "item.mc_merchant.coin_5": "5원",
+  "item.mc_merchant.coin_10": "10원",
+  "item.mc_merchant.coin_50": "50원",
+  "item.mc_merchant.coin_100": "100원",
+  "item.mc_merchant.return_scroll": "상점 이동 주문서",
+  "item.mc_merchant.spawn_scroll" : "순간이동주문서",
+  "itemGroup.mc_merchant.coin_tab": "동전"
+
+}

@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "mc_merchant:block/flag_block" }
+  }
+}
