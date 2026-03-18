@@ -71,8 +71,8 @@ public class FarmerMerchant extends AbstractVillager {
         //거래 품목 코드
         Ingredient allWools = Ingredient.of(ItemTags.WOOL);
                 this.getOffers().add(new MerchantOffer(
-                        new ItemCost(allWools.getItems()[0].getItem(), 32), // 입금 1
-                        new ItemStack(ExampleMod.COIN_1.get(), 10), // 출금
+                        new ItemCost(allWools.getItems()[0].getItem(), 20), // 입금 1
+                        new ItemStack(ExampleMod.COIN_1.get(), 1), // 출금
                         99999, 0, 0.00f // 최대 거래 횟수, 경험치, 가격 변동 계수 다이아 5개 1원
                 ));
         this.getOffers().add(new MerchantOffer(
