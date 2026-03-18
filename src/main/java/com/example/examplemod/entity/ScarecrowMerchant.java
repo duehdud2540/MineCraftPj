@@ -100,7 +100,7 @@ public class ScarecrowMerchant extends AbstractVillager {
 
 
         //판매
-        this.getOffers().add(new MerchantOffer(
+      /*  this.getOffers().add(new MerchantOffer(
                 new ItemCost(ExampleMod.FLAG_BLOCK, 1),
                 new ItemStack(ExampleMod.COIN_50.get(), 1),
                 99999, 0, 0.00f // 최대 거래 횟수, 경험치, 가격 변동 계수 // 네더라이트
@@ -109,10 +109,10 @@ public class ScarecrowMerchant extends AbstractVillager {
                 new ItemCost(ExampleMod.SPAWN_SCROLL.get(), 1),
                 new ItemStack(ExampleMod.COIN_5.get(), 1),
                 99999, 0, 0.00f // 최대 거래 횟수, 경험치, 가격 변동 계수 // 네더라이트
-        ));
+        ));*/
         this.getOffers().add(new MerchantOffer(
-                new ItemCost(ExampleMod.RETURN_SCROLL.get(), 1),
-                new ItemStack(ExampleMod.COIN_10.get(), 3),
+                new ItemCost(ExampleMod.COIN_10.get(), 3),
+                new ItemStack(ExampleMod.RETURN_SCROLL, 3),
                 99999, 0, 0.00f // 최대 거래 횟수, 경험치, 가격 변동 계수 // 네더라이트
         ));
         this.getOffers().add(new MerchantOffer(
@@ -121,7 +121,7 @@ public class ScarecrowMerchant extends AbstractVillager {
                 99999, 0, 0.00f // 최대 거래 횟수, 경험치, 가격 변동 계수 다이아 -> 5원
         ));
         this.getOffers().add(new MerchantOffer(
-                new ItemCost(ExampleMod.COIN_1.get(), 1),
+                new ItemCost(ExampleMod.COIN_10.get(), 1),
                 new ItemStack(Items.IRON_INGOT, 1),
                 99999, 0, 0.00f // 최대 거래 횟수, 경험치, 가격 변동 계수 철
         ));
@@ -141,7 +141,7 @@ public class ScarecrowMerchant extends AbstractVillager {
                 99999, 0, 0.00f // 최대 거래 횟수, 경험치, 가격 변동 계수 // 구블
         ));
         this.getOffers().add(new MerchantOffer(
-                new ItemCost(ExampleMod.COIN_50.get(), 1),
+                new ItemCost(ExampleMod.COIN_100.get(), 1),
                 new ItemStack(Items.NETHERITE_INGOT, 1),
                 99999, 0, 0.00f // 최대 거래 횟수, 경험치, 가격 변동 계수 // 구블
         ));
