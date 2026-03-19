@@ -96,20 +96,25 @@ public class ScarecrowMerchant extends AbstractVillager {
                 new ItemStack(ExampleMod.COIN_50.get(), 1),
                 99999, 0, 0.00f // 최대 거래 횟수, 경험치, 가격 변동 계수 // 네더라이트
         ));
+        this.getOffers().add(new MerchantOffer(
+                new ItemCost(Items.EMERALD, 5),
+                new ItemStack(ExampleMod.COIN_1.get(), 1),
+                99999, 0, 0.00f // 최대 거래 횟수, 경험치, 가격 변동 계수 // 에메랄드
+        ));
 
 
 
         //판매
-      /*  this.getOffers().add(new MerchantOffer(
-                new ItemCost(ExampleMod.FLAG_BLOCK, 1),
-                new ItemStack(ExampleMod.COIN_50.get(), 1),
+        this.getOffers().add(new MerchantOffer(
+                new ItemCost(ExampleMod.COIN_50.get(), 1),
+                new ItemStack(ExampleMod.FLAG_BLOCK.get(), 1),
                 99999, 0, 0.00f // 최대 거래 횟수, 경험치, 가격 변동 계수 // 네더라이트
         ));
         this.getOffers().add(new MerchantOffer(
-                new ItemCost(ExampleMod.SPAWN_SCROLL.get(), 1),
-                new ItemStack(ExampleMod.COIN_5.get(), 1),
+                new ItemCost(ExampleMod.COIN_10.get(), 1),
+                new ItemStack(ExampleMod.SPAWN_SCROLL.get(), 1),
                 99999, 0, 0.00f // 최대 거래 횟수, 경험치, 가격 변동 계수 // 네더라이트
-        ));*/
+        ));
         this.getOffers().add(new MerchantOffer(
                 new ItemCost(ExampleMod.COIN_10.get(), 3),
                 new ItemStack(ExampleMod.RETURN_SCROLL, 1),

@@ -2,6 +2,7 @@ package com.example.examplemod.entity;
 
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
@@ -56,16 +57,18 @@ public class PotionMerchantEntity extends AbstractVillager {
     public void rewardTradeXp(MerchantOffer offer) {
         if (this.getTradingPlayer() instanceof Player player) {
             ItemStack result = offer.getResult();
-            String name = result.getHoverName().getString();
+            // 비교를 위해 원본 아이템의 이름을 가져옴
+            String targetName = result.getHoverName().getString();
 
             // 1. 버프 부여 로직
             int addedDuration = 6000;
             net.minecraft.core.Holder<net.minecraft.world.effect.MobEffect> effectType = null;
 
-            if (name.contains("야간 투시")) effectType = net.minecraft.world.effect.MobEffects.NIGHT_VISION;
-            else if (name.contains("수중 호흡")) effectType = net.minecraft.world.effect.MobEffects.WATER_BREATHING;
-            else if (name.contains("재생")) effectType = net.minecraft.world.effect.MobEffects.REGENERATION;
-            else if (name.contains("신속")) effectType = net.minecraft.world.effect.MobEffects.MOVEMENT_SPEED;
+            if (targetName.contains("야간 투시")) effectType = MobEffects.NIGHT_VISION;
+            else if (targetName.contains("수중 호흡")) effectType = MobEffects.WATER_BREATHING;
+            else if (targetName.contains("재생")) effectType = MobEffects.REGENERATION;
+            else if (targetName.contains("신속")) effectType = MobEffects.MOVEMENT_SPEED;
+            else if (targetName.contains("화염 저항")) effectType = MobEffects.FIRE_RESISTANCE;
 
             if (effectType != null) {
                 net.minecraft.world.effect.MobEffectInstance current = player.getEffect(effectType);
@@ -74,17 +77,24 @@ public class PotionMerchantEntity extends AbstractVillager {
                 player.playSound(SoundEvents.PLAYER_LEVELUP, 1.0F, 1.2F);
             }
 
-            // 2. 아이템 삭제 및 잔상 제거 (여기가 핵심!)
-            player.getInventory().removeItem(result);
+            // 커서에 잡힌 아이템 삭제
             player.containerMenu.setCarried(ItemStack.EMPTY);
 
-            // sPlayer 선언은 여기서 딱 한 번만!
-            if (player instanceof ServerPlayer sPlayer) {
-                // 아까 에러 났던 sendAllContents 대신 broadcastFullState 사용
-                sPlayer.containerMenu.broadcastFullState();
+            // 인벤토리 전체를 검사해서 쉬프트 클릭으로 들어간 아이템 삭제
+            for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+                ItemStack stack = player.getInventory().getItem(i);
+                // 이름이 똑같은 아이템이 인벤토리에 있다면 삭제 (우리 상점 전용 포션만 지우기 위해)
+                if (!stack.isEmpty() && stack.getHoverName().getString().equals(targetName)) {
+                    stack.setCount(0);
+                }
+            }
 
-                // 커서 아이템 강제 삭제 패킷 전송
+            // 서버 사이드 동기화
+            if (player instanceof ServerPlayer sPlayer) {
+                sPlayer.containerMenu.broadcastFullState();
+                // 슬롯 업데이트 패킷을 보내서 클라이언트 화면에서도 확실히 지움
                 sPlayer.connection.send(new ClientboundContainerSetSlotPacket(0, -1, -1, ItemStack.EMPTY));
+                sPlayer.inventoryMenu.resumeRemoteUpdates();
             }
         }
     }
@@ -117,6 +127,11 @@ public class PotionMerchantEntity extends AbstractVillager {
         ItemStack regen = new ItemStack(Items.POTION);
         regen.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, Component.literal("§d즉시 재생 부여 (5분)"));
         offers.add(new MerchantOffer(new ItemCost(ExampleMod.COIN_5.get(), 1), regen, maxUses, 0, 0.0f));
+
+        //화염저항
+        ItemStack fire_resistance = new ItemStack(net.minecraft.world.item.Items.POTION);
+        fire_resistance.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, net.minecraft.network.chat.Component.literal("§b즉시 화염 저항 부여 (5분)"));
+        offers.add(new MerchantOffer( new ItemCost(ExampleMod.COIN_5.get(), 1),fire_resistance,maxUses, 0, 0.00f));
 
     }
 

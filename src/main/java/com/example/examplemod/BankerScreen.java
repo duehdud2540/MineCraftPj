@@ -45,6 +45,10 @@ public class BankerScreen extends AbstractContainerScreen<BankerMenu> {
         this.addRenderableWidget(Button.builder(Component.literal("500원 출금"), button -> {
             PacketDistributor.sendToServer(new BankActionPacket(1, 500));
         }).bounds(buttonX, this.topPos + 90, 65, 20).build());
+        // 5. 1000원 출금 버튼
+        this.addRenderableWidget(Button.builder(Component.literal("1000원 출금"), button -> {
+            PacketDistributor.sendToServer(new BankActionPacket(1, 1000));
+        }).bounds(buttonX, this.topPos + 115, 65, 20).build());
     }
 
     @Override

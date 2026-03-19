@@ -27,12 +27,10 @@ public class BankerEntity extends PathfinderMob {
     }
     @Override
     protected void registerGoals() {
-        // 8블록 이내의 플레이어를 쳐다봄
         this.goalSelector.addGoal(0, new net.minecraft.world.entity.ai.goal.LookAtPlayerGoal(this, Player.class, 2.0F));
     }
     @Override
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
-        // 서버 측에서만 실행
         if (!this.level().isClientSide && player instanceof ServerPlayer serverPlayer) {
 
             serverPlayer.openMenu(new SimpleMenuProvider(
@@ -41,19 +39,13 @@ public class BankerEntity extends PathfinderMob {
             ));
             return InteractionResult.SUCCESS;
         }
-        // 클라이언트 측에서는 팔 흔드는 모션 등 시각적 효과만 처리
         return InteractionResult.sidedSuccess(this.level().isClientSide);
     }
-
-    // 모든데미지 무력화
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        // 절대 데미지나(kill) 공허같은 데미지는 무조건 들어오게만들었음
         if (source.is(net.minecraft.world.damagesource.DamageTypes.FELL_OUT_OF_WORLD)) {
             return true;
         }
-
-        // 공격자가 플레이어이고 크리에이티브 모드인 경우 죽일 수 있게 허용함
         if (source.getEntity() instanceof Player player && player.isCreative()) {
             return true;
         }
@@ -61,19 +53,18 @@ public class BankerEntity extends PathfinderMob {
     }
 
 
-    // 밀려나지않음
+
     @Override
     public boolean isPushable() {
         return false;
     }
 
-    // 몬스터 인식불가
     @Override
     public boolean canBeSeenAsEnemy() {
         return false;
     }
 
-    // 유체화
+
     @Override
     public boolean isPickable() {
         return true; // 우클릭 상호작용을 위해 true 유지
@@ -84,7 +75,6 @@ public class BankerEntity extends PathfinderMob {
         return false;
     }
 
-    // 이름표없어도 사라지지않음
     @Override
     public boolean requiresCustomPersistence() {
         return true;

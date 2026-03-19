@@ -2,6 +2,7 @@ package com.example.examplemod.items;
 
 import com.example.examplemod.ExampleMod;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -22,7 +23,7 @@ public class SpawnScrollItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        List<BlockPos> flags = player.getData(ExampleMod.FLAG_LIST);
+        List<GlobalPos> flags = player.getData(ExampleMod.FLAG_LIST);
         if (flags.isEmpty()) {
             if (level.isClientSide) {
                 player.sendSystemMessage(Component.literal("§c[오류] §f설치된 깃발이 없습니다!"));

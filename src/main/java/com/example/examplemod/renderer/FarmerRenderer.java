@@ -27,7 +27,7 @@ public class FarmerRenderer extends MobRenderer<FarmerMerchant, VillagerModel<Fa
         this.addLayer(new RenderLayer<FarmerMerchant, VillagerModel<FarmerMerchant>>(this) {
             @Override
             public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, FarmerMerchant entity, float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
-                // 몸체 모델과 똑같은 모양으로 농부 옷 텍스처를 한 겹 더 그립니다.
+
                 renderColoredCutoutModel(this.getParentModel(), FARMER_CLOTHES, poseStack, buffer, packedLight, entity, -1);
             }
         });
@@ -35,7 +35,6 @@ public class FarmerRenderer extends MobRenderer<FarmerMerchant, VillagerModel<Fa
 
     @Override
     public ResourceLocation getTextureLocation(FarmerMerchant entity) {
-        // 기본 바탕은 주민의 민머리 피부색 텍스처를 반환합니다.
         return VILLAGER_BASE;
     }
 }

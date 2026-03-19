@@ -1,6 +1,7 @@
 package com.example.examplemod;
 
 import com.example.examplemod.blocks.FlagBlock;
+import com.example.examplemod.blocks.ReinforcedGlassBlock;
 import com.example.examplemod.entity.*;
 import com.example.examplemod.items.ReturnScrollItem;
 import com.example.examplemod.items.SpawnScrollItem;
@@ -12,9 +13,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -28,9 +32,11 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -87,6 +93,17 @@ public class ExampleMod {
     public static final DeferredBlock<Block> FLAG_BLOCK = BLOCKS.register("flag_block", () -> new FlagBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PURPLE).strength(2.0f).noOcclusion()));
     public static final DeferredItem<Item> FLAG_BLOCK_ITEM = ITEMS.register("flag_block", () -> new BlockItem(FLAG_BLOCK.get(), new Item.Properties()));
 
+    public static final DeferredBlock<Block> REINFORCED_GLASS = BLOCKS.register("reinforced_glass",
+            () -> new ReinforcedGlassBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.NONE)
+                    .strength(6000000.0F, 6000000.0F)
+                    .noOcclusion()
+                    .isValidSpawn((state, getter, pos, type) -> false)
+                    .isRedstoneConductor((state, getter, pos) -> false)
+                    .isSuffocating((state, getter, pos) -> false)
+                    .isViewBlocking((state, getter, pos) -> false)
+            ));
+    public static final DeferredItem<Item> REINFORCED_GLASS_ITEM = ITEMS.register("reinforced_glass", () -> new BlockItem(REINFORCED_GLASS.get(), new Item.Properties()));
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> COIN_TAB = CREATIVE_MODE_TABS.register("coin_tab", () -> CreativeModeTab.builder().title(Component.literal("동전")).icon(() -> new ItemStack(COIN_100.get()))
             .displayItems((parameters, output) -> {
                 output.accept(COIN_10.get());
@@ -98,7 +115,11 @@ public class ExampleMod {
 
     //entity 등록부
     public static final Supplier<AttachmentType<Integer>> BANK_BALANCE = ATTACHMENT_TYPES.register("bank_balance", () -> AttachmentType.builder(() -> 0).serialize(Codec.INT).copyOnDeath().build());
-    public static final Supplier<AttachmentType<List<BlockPos>>> FLAG_LIST = ATTACHMENT_TYPES.register("flag_list", () -> AttachmentType.builder(() -> (List<BlockPos>) new ArrayList<BlockPos>()).serialize(Codec.list(BlockPos.CODEC)).copyOnDeath().build());
+    public static final Supplier<AttachmentType<List<GlobalPos>>> FLAG_LIST = ATTACHMENT_TYPES.register("flag_list",
+            () -> AttachmentType.builder(() -> (List<GlobalPos>) new ArrayList<GlobalPos>())
+                    .serialize(Codec.list(GlobalPos.CODEC))
+                    .copyOnDeath()
+                    .build());
     public static final DeferredHolder<AttachmentType<?>, AttachmentType<List<String>>> FLAG_NAMES = ATTACHMENT_TYPES.register("flag_names", () -> AttachmentType.builder(() -> (List<String>) new ArrayList<String>()).serialize(Codec.list(Codec.STRING)).copyOnDeath().build());
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FlagBlockEntity>> FLAG_BLOCK_ENTITY = BLOCK_ENTITIES.register("flag_block_entity", () -> BlockEntityType.Builder.of(FlagBlockEntity::new, FLAG_BLOCK.get()).build(null));
@@ -120,21 +141,28 @@ public class ExampleMod {
     public void onPlayerLoginCombined(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             Level level = player.level();
-            List<BlockPos> savedFlags = new ArrayList<>(player.getData(FLAG_LIST));
+            List<GlobalPos> savedFlags = new ArrayList<>(player.getData(FLAG_LIST));
             List<String> savedNames = new ArrayList<>(player.getData(FLAG_NAMES));
 
             if (!savedFlags.isEmpty()) {
-                List<BlockPos> validFlags = new ArrayList<>();
+                List<GlobalPos> validFlags = new ArrayList<>();
                 List<String> validNames = new ArrayList<>();
                 boolean isDirty = false;
 
                 for (int i = 0; i < savedFlags.size(); i++) {
-                    BlockPos pos = savedFlags.get(i);
-                    if (level.getBlockState(pos).is(FLAG_BLOCK.get())) {
-                        validFlags.add(pos);
-                        if (i < savedNames.size()) validNames.add(savedNames.get(i));
+                    GlobalPos gpos = savedFlags.get(i);
+
+                    if (level.dimension().equals(gpos.dimension())) {
+                        BlockPos pos = gpos.pos();
+                        if (level.getBlockState(pos).is(FLAG_BLOCK.get())) {
+                            validFlags.add(gpos); // GlobalPos 그대로 추가
+                            if (i < savedNames.size()) validNames.add(savedNames.get(i));
+                        } else {
+                            isDirty = true;
+                        }
                     } else {
-                        isDirty = true;
+                        validFlags.add(gpos);
+                        if (i < savedNames.size()) validNames.add(savedNames.get(i));
                     }
                 }
 
@@ -223,14 +251,34 @@ public class ExampleMod {
             registrar.playToClient(SyncFlagsPacket.TYPE, SyncFlagsPacket.STREAM_CODEC, SyncFlagsPacket::handle);
             registrar.playToServer(ChangeFlagNamePacket.TYPE, ChangeFlagNamePacket.STREAM_CODEC, ChangeFlagNamePacket::handle);
             registrar.playToServer(TeleportPacket.TYPE, TeleportPacket.STREAM_CODEC, (payload, context) -> context.enqueueWork(() -> {
-                if (context.player() instanceof ServerPlayer player) {
-                    BlockPos pos = payload.targetPos();
-                    player.teleportTo(pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5);
-                    player.sendSystemMessage(Component.literal("§a[이동] §f성공적으로 이동했습니다."));
+                if (!(context.player() instanceof ServerPlayer player)) return;
+
+                // 1. 스크롤 확인
+                ItemStack scroll = player.getInventory().items.stream()
+                        .filter(stack -> stack.is(SPAWN_SCROLL.get())).findFirst().orElse(ItemStack.EMPTY);
+
+                // 2. 권한 체크
+                if (scroll.isEmpty() && !player.getAbilities().instabuild) {
+                    player.sendSystemMessage(Component.literal("§c[오류] §f스폰 스크롤이 부족합니다!"));
+                    return;
+                }
+
+                // 3. 차원 이동 및 텔레포트
+                GlobalPos target = payload.targetGlobalPos(); // 패킷에서 GlobalPos를 가져온다고 가정
+                var targetLevel = player.server.getLevel(target.dimension());
+
+                if (targetLevel != null) {
+                    BlockPos p = target.pos();
+                    player.teleportTo(targetLevel, p.getX() + 0.5, p.getY() + 1.0, p.getZ() + 0.5, player.getYRot(), player.getXRot());
+
+                    // 4. 아이템 소모
+                    if (!player.getAbilities().instabuild) scroll.shrink(1);
+
+                    player.sendSystemMessage(Component.literal("§a[이동] §f차원을 넘어 이동했습니다!"));
                 }
             }));
             registrar.playToClient(SyncBalancePacket.TYPE, SyncBalancePacket.STREAM_CODEC, (payload, context) -> context.enqueueWork(() -> {
-                ExampleMod.clientBalance = payload.balance(); // 메인 클래스의 안전한 변수로 뺐음
+                ExampleMod.clientBalance = payload.balance();
             }));
             registrar.playToServer(BankActionPacket.TYPE, BankActionPacket.STREAM_CODEC, (payload, context) -> context.enqueueWork(() -> {
                 if (context.player() instanceof ServerPlayer player && player.containerMenu instanceof BankerMenu menu) {
@@ -274,19 +322,18 @@ public class ExampleMod {
             }));
         }
     }
-    @EventBusSubscriber(modid = ExampleMod.MODID, bus = EventBusSubscriber.Bus.GAME) // Forge/NeoForge 일반 버스
+    @EventBusSubscriber(modid = ExampleMod.MODID, bus = EventBusSubscriber.Bus.GAME)
     public class PlayerDataEvents {
 
         @SubscribeEvent
         public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
             if (event.getEntity() instanceof ServerPlayer serverPlayer) {
                 // 1. 서버에 저장된 데이터를 가져옴
-                List<BlockPos> flags = serverPlayer.getData(ExampleMod.FLAG_LIST);
-                List<String> names = serverPlayer.getData(ExampleMod.FLAG_NAMES);
-                int balance = serverPlayer.getData(ExampleMod.BANK_BALANCE); // 잔고도 같이 보내주면 좋겠죠?
+                List<GlobalPos> flags = serverPlayer.getData(ExampleMod.FLAG_LIST);
 
-                // 2. 클라이언트에게 "이게 네 진짜 데이터야!"라고 패킷 전송
-                // 아까 만드신 SyncFlagsPacket과 SyncBalancePacket을 활용합니다.
+                List<String> names = serverPlayer.getData(ExampleMod.FLAG_NAMES);
+                int balance = serverPlayer.getData(ExampleMod.BANK_BALANCE);
+
                 PacketDistributor.sendToPlayer(serverPlayer, new SyncFlagsPacket(flags, names));
                 PacketDistributor.sendToPlayer(serverPlayer, new SyncBalancePacket(balance));
 
@@ -294,13 +341,24 @@ public class ExampleMod {
             }
         }
     }
+    @SubscribeEvent
+    public  void onPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            // 서버가 저장하고 있는 깃발 데이터를 가져옴
+            List<GlobalPos> currentFlags = player.getData(ExampleMod.FLAG_LIST);
+            List<String> currentNames = player.getData(ExampleMod.FLAG_NAMES);
 
+            // 차원을 이동한 직후의 클라이언트에게 데이터를 다시 전송
+            PacketDistributor.sendToPlayer(player, new SyncFlagsPacket(currentFlags, currentNames));
+        }
+    }
 //클라이언트 버스
     @EventBusSubscriber(modid = ExampleMod.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
             LOGGER.info("HELLO FROM CLIENT SETUP");
+            ItemBlockRenderTypes.setRenderLayer(ExampleMod.REINFORCED_GLASS.get(), RenderType.translucent());
         }
 
         @SubscribeEvent

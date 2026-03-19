@@ -22,27 +22,24 @@ public class  ReturnScrollItem extends Item {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
 
-        // 서버 측에서만 실행
         if (!level.isClientSide) {
             if (player instanceof ServerPlayer serverPlayer) {
-                ServerLevel serverLevel = (ServerLevel) level;
-                BlockPos targetPos = new BlockPos(104, 70 , -236);
+                ServerLevel overworld = serverPlayer.getServer().getLevel(Level.OVERWORLD);
+                if (overworld != null) {
+                    BlockPos targetPos = new BlockPos(104, 70, -236);
 
-                //플레이어 텔레포트
-                serverPlayer.teleportTo(serverLevel,
-                        targetPos.getX() + 0.5, targetPos.getY(), targetPos.getZ() + 0.5,
-                        serverPlayer.getYRot(), serverPlayer.getXRot());
+                    serverPlayer.teleportTo(overworld,
+                            targetPos.getX() + 0.5, targetPos.getY(), targetPos.getZ() + 0.5,
+                            serverPlayer.getYRot(), serverPlayer.getXRot());
 
-                //효과음 재생 (엔더맨 텔레포트 소리)
-                level.playSound(null, player.getX(), player.getY(), player.getZ(),
-                        SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    overworld.playSound(null, targetPos.getX(), targetPos.getY(), targetPos.getZ(),
+                            SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1.0F, 1.0F);
 
-                //메시지 띄우기
-                player.displayClientMessage(Component.literal("마을로 귀환했습니다!"), true);
+                    player.displayClientMessage(Component.literal("§a상점으로 귀환했습니다!"), true);
 
-                //아이템 소모 (서바이벌 모드일 때만)
-                if (!player.getAbilities().instabuild) {
-                    itemstack.shrink(1);
+                    if (!player.getAbilities().instabuild) {
+                        itemstack.shrink(1);
+                    }
                 }
             }
         }

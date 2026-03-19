@@ -15,19 +15,19 @@ import net.neoforged.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class FishermanRenderer extends MobRenderer<FishermanMerchant, VillagerModel<FishermanMerchant>> {
 
-    // 1. 기본 몸체 (피부)
+
     private static final ResourceLocation VILLAGER_BASE = ResourceLocation.withDefaultNamespace("textures/entity/villager/villager.png");
-    // 2. 덮어씌울 옷 (어부)
+
     private static final ResourceLocation FISHERMAN_CLOTHES = ResourceLocation.withDefaultNamespace("textures/entity/villager/profession/fisherman.png");
 
     public FishermanRenderer(EntityRendererProvider.Context context) {
         super(context, new VillagerModel<>(context.bakeLayer(ModelLayers.VILLAGER)), 0.5f);
 
-        // [핵심] 렌더러에 '어부 옷' 레이어를 추가합니다.
+
         this.addLayer(new RenderLayer<FishermanMerchant, VillagerModel<FishermanMerchant>>(this) {
             @Override
             public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, FishermanMerchant entity, float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
-                // 몸체 모델 위에 어부 옷 텍스처를 겹쳐서 그립니다.
+                // 몸체 모델 위에 어부 옷 텍스처를 겹쳐서 그림
                 renderColoredCutoutModel(this.getParentModel(), FISHERMAN_CLOTHES, poseStack, buffer, packedLight, entity, -1);
             }
         });

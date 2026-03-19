@@ -35,7 +35,7 @@ public class FishermanMerchant extends AbstractVillager {
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (this.isAlive() && this.getTradingPlayer() == null) {
 
-            // 1. 거래 시작하는 '끄덕' 소리 재생
+            //거래 시작하는 '끄덕' 소리 재생
             if (hand == InteractionHand.MAIN_HAND) {
                 this.playSound(SoundEvents.VILLAGER_TRADE, 1.0F, 1.0F);
             }
@@ -67,28 +67,28 @@ public class FishermanMerchant extends AbstractVillager {
 
         //거래 품목 코드
         this.getOffers().add(new MerchantOffer(
-                new ItemCost(Items.COD, 12), // 입금 1
+                new ItemCost(Items.COD, 4), // 입금 1
                 new ItemStack(ExampleMod.COIN_1.get(), 1), // 출금
                 99999, 0, 0.00f // 최대 거래 횟수, 경험치, 가격 변동 계수 다이아 5개 1원
         ));
         //거래 품목 코드
         this.getOffers().add(new MerchantOffer(
-                new ItemCost(Items.SALMON, 12), // 입금 1
-                new ItemStack(ExampleMod.COIN_1.get(), 1), // 출금
-                99999, 0, 0.00f // 최대 거래 횟수, 경험치, 가격 변동 계수 다이아 5개 1원
-        ));
-
-        //거래 품목 코드
-        this.getOffers().add(new MerchantOffer(
-                new ItemCost(Items.TROPICAL_FISH, 4), // 입금 1
+                new ItemCost(Items.SALMON, 4), // 입금 1
                 new ItemStack(ExampleMod.COIN_1.get(), 1), // 출금
                 99999, 0, 0.00f // 최대 거래 횟수, 경험치, 가격 변동 계수 다이아 5개 1원
         ));
 
         //거래 품목 코드
         this.getOffers().add(new MerchantOffer(
-                new ItemCost(Items.PUFFERFISH, 2), // 입금 1
+                new ItemCost(Items.TROPICAL_FISH, 1), // 입금 1
                 new ItemStack(ExampleMod.COIN_1.get(), 1), // 출금
+                99999, 0, 0.00f // 최대 거래 횟수, 경험치, 가격 변동 계수 다이아 5개 1원
+        ));
+
+        //거래 품목 코드
+        this.getOffers().add(new MerchantOffer(
+                new ItemCost(Items.PUFFERFISH, 1), // 입금 1
+                new ItemStack(ExampleMod.COIN_5.get(), 1), // 출금
                 99999, 0, 0.00f // 최대 거래 횟수, 경험치, 가격 변동 계수 다이아 5개 1원
         ));
     }

@@ -1,6 +1,7 @@
 package com.example.examplemod;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -31,7 +32,7 @@ public record ChangeFlagNamePacket(BlockPos pos, String newName) implements Cust
     public static void handle(ChangeFlagNamePacket payload, IPayloadContext context) {
         context.enqueueWork(() -> {
             Player player = context.player();
-            List<BlockPos> flags = player.getData(ExampleMod.FLAG_LIST);
+            List<GlobalPos> flags = player.getData(ExampleMod.FLAG_LIST);
             List<String> names = new ArrayList<>(player.getData(ExampleMod.FLAG_NAMES));
 
             int index = flags.indexOf(payload.pos());

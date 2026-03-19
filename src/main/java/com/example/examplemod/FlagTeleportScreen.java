@@ -3,7 +3,7 @@ package com.example.examplemod;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
@@ -23,12 +23,12 @@ public class FlagTeleportScreen extends Screen {
         if (this.minecraft == null || this.minecraft.player == null) return;
         Player player = this.minecraft.player;
 
-        List<BlockPos> flags = player.getData(ExampleMod.FLAG_LIST);
+        List<GlobalPos> flags = player.getData(ExampleMod.FLAG_LIST);
         List<String> names = player.getData(ExampleMod.FLAG_NAMES);
 
         for (int i = 0; i < flags.size(); i++) {
-            BlockPos pos = flags.get(i);
-            String flagName = (i < names.size()) ? names.get(i) : pos.toShortString();
+            GlobalPos pos = flags.get(i);
+            String flagName = (i < names.size()) ? names.get(i) : pos.pos().toShortString();
             String buttonText = (i + 1) + "번 지점: " + flagName;
             int index = i;
             int x = (this.width / 2) + (index % 2 == 0 ? -105 : 5);
@@ -49,9 +49,9 @@ public class FlagTeleportScreen extends Screen {
 
     private void teleportToFlag(int index) {
         if (this.minecraft == null || this.minecraft.player == null) return;
-        List<BlockPos> flags = this.minecraft.player.getData(ExampleMod.FLAG_LIST);
+        List<GlobalPos> flags = this.minecraft.player.getData(ExampleMod.FLAG_LIST);
         if (index >= 0 && index < flags.size()) {
-            BlockPos targetPos = flags.get(index);
+            GlobalPos targetPos = flags.get(index);
             PacketDistributor.sendToServer(new TeleportPacket(targetPos));
             this.onClose();
         }
